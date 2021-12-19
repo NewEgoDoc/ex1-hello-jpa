@@ -16,12 +16,13 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Member member = new Member();
-            member.setId(1L);
-            member.setName("Hello");//안됨...
-            //jpa에서는 transaction이 중요!
+            Member member = em.find(Member.class, 1L);
+            System.out.println("member = " + member);
+
+            member.setName("spring");
 
             em.persist(member);
+
 
             tx.commit();
         } catch (Exception e){
