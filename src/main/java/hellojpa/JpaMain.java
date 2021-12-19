@@ -15,18 +15,20 @@ public class JpaMain {
         //DB connectino을 얻어서 쿼리를 날리고 작업을 할때마다 이 EntityManager를 만들어주어에한다
         EntityTransaction tx = em.getTransaction();
         tx.begin();
+        try {
+            Member member = new Member();
+            member.setId(1L);
+            member.setName("Hello");//안됨...
+            //jpa에서는 transaction이 중요!
 
-        Member member = new Member();
-        member.setId(1L);
-        member.setName("Hello");//안됨...
-        //jpa에서는 transaction이 중요!
+            em.persist(member);
 
-        em.persist(member);
-
-        tx.commit();
-        
-        em.close();
-
+            tx.commit();
+        } catch (Exception e){
+            tx.rollback();
+        } finally {
+            em.close();
+        }
         emf.close();
     }
 }
