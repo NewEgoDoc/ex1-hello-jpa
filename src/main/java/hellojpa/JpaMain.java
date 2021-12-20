@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -23,12 +24,14 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Member member = em.find(Member.class, 1L);
-            System.out.println("member = " + member);
-
-            member.setName("spring");
-
-            em.persist(member);
+            //Member member = em.find(Member.class, 1L);
+            List<Member> result = em.createQuery("select m from Member as m", Member.class)
+                    .setFirstResult(5)
+                    .setMaxResults(8)
+                    .getResultList();
+            for(Member member: result){
+                System.out.println("member.name = " + member.getName());
+            }
             //어떻게 이런게 가능할까? jpa를 통해 엔티티를 가져오면 jpa가 관리를 한다
             //jpa가 변경이 되었는지 안되었는지 transaction이 커밋 되는 시점에서 다 체크를 하면서
             //무엇인가 변경 사항이 발견 되면 바꿔서 업데이트 쿼리를 날리게 된다.
