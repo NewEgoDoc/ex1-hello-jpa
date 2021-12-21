@@ -18,13 +18,12 @@ public class JpaMain {
         tx.begin();
         try {
             //영속
-            Member member = new Member(200L, "member200");
-            em.persist(member);
+            Member member = em.find(Member.class, 100L);
+            member.setName("AAAAAA");
 
-            em.flush();
-
-            System.out.println("================================");
-
+            em.detach(member);
+            //em.clear();//영속성 상태를 완전히 다 없애 버리는 상태
+            System.out.println("====================");
             tx.commit();
         } catch (Exception e){
             tx.rollback();
