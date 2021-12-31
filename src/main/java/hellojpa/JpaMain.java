@@ -17,12 +17,27 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
+            //저장
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
             Member member = new Member();
-            member.setUsername("asdf");
-            System.out.println("============");
+            member.setUsername("member1");
+            member.setTeam(team);
             em.persist(member);
-            System.out.println("============");
+
+            em.flush();
+            em.clear();
+
+            //조회
+            Member findMember = em.find(Member.class, member.getId());
+            Team team1 = findMember.getTeam();
+            System.out.println("team1 = " + team1.getName());
+
+            //
+            Team newTeam = em.find(Team.class, 100L);
+            findMember.setTeam(newTeam);
 
             tx.commit();
         } catch (Exception e){
