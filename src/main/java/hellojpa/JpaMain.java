@@ -16,25 +16,50 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
+            Member member1 = new Member();
+            member1.setUsername("Hello1");
 
-            Movie movie = new Movie();
-            movie.setDirector("aaaa");
-            movie.setActor("bbbb");
-            movie.setName("바람과 함께 사라지다");
-            movie.setPrice(100000);
+            Member member2 = new Member();
+            member2.setUsername("Hello2");
 
-            em.persist(movie);
+            em.persist(member1);
+            em.persist(member2);
 
             em.flush();
             em.clear();
-            Movie findMovie = em.find(Movie.class, movie.getId());
-            System.out.println("movie1 = " + findMovie.getName());
+
+            Member m1 = em.find(Member.class, member1.getId());
+            System.out.println("m1.getClass() = " + m1.getClass());
+            Member reference = em.getReference(Member.class, member1.getId());
+            System.out.println("reference.getClass() = " + reference.getClass());
+            
+
+            //System.out.println("m2 == m1 : " + (m2.getClass()==m1.getClass());
+
+//            Member findMember = em.getReference(Member.class, member.getId()); //= em.find(Member.class, 1L);
+//            System.out.println("findMember = " + findMember);
+//            System.out.println("findMember = " + findMember.getId());
+//            System.out.println("findMember = " + findMember.getUsername());
+
             tx.commit();
         } catch (Exception e){
             tx.rollback();
+            e.printStackTrace();
         } finally {
             em.close();
         }
         emf.close();
+    }
+
+    private static void printMember(Member member) {
+        String username = member.getUsername();
+        System.out.println("username = " + username);
+    }
+
+    private static void printMemberAndTeam(Member member) {
+        String username = member.getUsername();
+        System.out.println("username = " + username);
+        Team team = member.getTeam();
+        System.out.println("team = " + team.getName());
     }
 }
