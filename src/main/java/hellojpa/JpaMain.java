@@ -16,30 +16,21 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Member member1 = new Member();
-            member1.setUsername("Hello1");
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            Member member2 = new Member();
-            member2.setUsername("Hello2");
+            Parent parent = new Parent();
 
-            em.persist(member1);
-            em.persist(member2);
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
 
             em.flush();
             em.clear();
 
-            Member m1 = em.find(Member.class, member1.getId());
-            System.out.println("m1.getClass() = " + m1.getClass());
-            Member reference = em.getReference(Member.class, member1.getId());
-            System.out.println("reference.getClass() = " + reference.getClass());
-            
-
-            //System.out.println("m2 == m1 : " + (m2.getClass()==m1.getClass());
-
-//            Member findMember = em.getReference(Member.class, member.getId()); //= em.find(Member.class, 1L);
-//            System.out.println("findMember = " + findMember);
-//            System.out.println("findMember = " + findMember.getId());
-//            System.out.println("findMember = " + findMember.getUsername());
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildList().remove(0);
 
             tx.commit();
         } catch (Exception e){
