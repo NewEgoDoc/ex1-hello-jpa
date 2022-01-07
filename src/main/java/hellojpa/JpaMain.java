@@ -18,6 +18,9 @@ public class JpaMain {
         try {
 
             Address address = new Address("city", "street", "102012");
+            Address address2 = new Address("city", "street", "102012");
+
+            System.out.println(address==address2);
 
             Member member1 = new Member();
             member1.setUsername("member1");
