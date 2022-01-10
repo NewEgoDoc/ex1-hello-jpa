@@ -17,23 +17,33 @@ public class JpaMain {
 
         try {
 
-            Address address = new Address("city", "street", "102012");
-            Address address2 = new Address("city", "street", "102012");
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setHomeAddress(new Address("city1","street","1") );
 
-            System.out.println(address==address2);
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("피자");
+            member.getFavoriteFoods().add("족발");
 
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            member1.setHomeAddress(address);
 
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            member2.setHomeAddress(address);
 
-            em.persist(member1);
-            em.persist(member2);
+            em.persist(member);
+            
+            em.flush();
+            em.clear();
 
-            member1.getHomeAddress().setCity("newCity");
+            Member findMember = em.find(Member.class, member.getId());
+
+
+            //findMember.setHomeAddress(new Address("newCity", a.get)); 이렇게 통째로 바꿔야 한다는 것을 잊지 말자!
+
+            findMember.getFavoriteFoods().remove("치킨");
+            findMember.getFavoriteFoods().add("한식식");
+
+            findMember.getAddressHistory().remove(new AddressEntity("old1","street","1"));
+            /*이래서 equal hashcode가 완벽하게 구현되어야한다!*/
+            findMember.getAddressHistory().add(new AddressEntity("newCity1","street","1"));
+
 
             tx.commit();
         } catch (Exception e){
